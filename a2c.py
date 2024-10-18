@@ -5,12 +5,8 @@ import gymnasium as gym
 import matplotlib.pyplot as plt
 
 class A2C:
-    def __init__(self, env):
-        # Set the seed values
-        torch.seed = 42
-        torch.manual_seed(torch.seed)
-        np.random.seed(torch.seed)
-        
+    def __init__(self, env):  
+              
         # Setting up the environment
         self.env = env
         # Set the environment seed
