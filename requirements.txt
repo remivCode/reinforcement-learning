@@ -1,2 +1,4 @@
 ale-py
 gymnasium
+torch
+matplotlib
