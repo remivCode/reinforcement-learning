@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 
 class A2C:
     def __init__(self, env):  
-              
         # Setting up the environment
         self.env = env
         # Set the environment seed
@@ -17,25 +16,27 @@ class A2C:
 
         # Create a model for the actor - policy
         self.actor = torch.nn.Sequential(
-            torch.nn.Linear(self.numStateSpace, 32),
+            torch.nn.Linear(self.numStateSpace, 256),
             torch.nn.ReLU(),
-            torch.nn.Linear(32, self.numActionSpace),
+            torch.nn.Linear(256, 256),
+            torch.nn.ReLU(),
+            torch.nn.Linear(256, self.numActionSpace),
             torch.nn.Softmax(dim=-1)
         )
 
         # Create a model for the critic - value
         self.critic = torch.nn.Sequential(
-            torch.nn.Linear(self.numStateSpace, 32),
+            torch.nn.Linear(self.numStateSpace, 256),
             torch.nn.ReLU(),
-            torch.nn.Linear(32, 32),
+            torch.nn.Linear(256, 256),
             torch.nn.ReLU(),
-            torch.nn.Linear(32, 1),
-            # torch.nn.Tanh()
+            torch.nn.Linear(256, 1),
+            #torch.nn.Softmax()
         )
         # Optimizer for the actor
-        self.actorOptim = torch.optim.Adam(self.actor.parameters(), lr=0.001)        
+        self.actorOptim = torch.optim.Adam(self.actor.parameters(), lr=0.0001)        
         # Optimizer for the critic
-        self.criticOptim = torch.optim.Adam(self.critic.parameters(), lr=0.001)
+        self.criticOptim = torch.optim.Adam(self.critic.parameters(), lr=0.0001)
         # Loss function for the critic
         self.criticLossFun = torch.nn.MSELoss()
 
@@ -50,6 +51,8 @@ class A2C:
 
     # A test function that tests using the trained actor model on a new instance of the environment
     def test(self, render=True):
+
+        np.random.seed(42)
         # Reset the environment for testing
         state_, _ = self.env.reset()
         # Flag to determine if an episode has ended
@@ -81,7 +84,7 @@ class A2C:
     # A function to plot the scores received over a number of epochs
     def plot(self, info_):
         # Sort the scores by epoch
-        info_.sort(axis=0)
+        #info_.sort(axis=1)
         # Extract the epochs and respective scores
         x, y = info_[:, 0], info_[:, 1]
         

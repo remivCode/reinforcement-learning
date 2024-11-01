@@ -2,3 +2,4 @@ ale-py
 gymnasium
 torch
 matplotlib
+scipy
